@@ -12,5 +12,6 @@ namespace MyCars.Core.Models
         public DateTime IssueYear { get; set; }
         public string VIN { get; set; }
         public string Numberplate { get; set; }
+        public int UserId { get; set; }
     }
 }

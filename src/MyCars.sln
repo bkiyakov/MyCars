@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCars.API", "MyCars.API\MyCars.API.csproj", "{61EAF817-568B-4A39-BB85-F2CFD9B08D38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCars.Core", "MyCars.Core\MyCars.Core.csproj", "{D41E2FBC-C67A-45CA-BEB5-721A9346BEB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyCars.Core", "MyCars.Core\MyCars.Core.csproj", "{D41E2FBC-C67A-45CA-BEB5-721A9346BEB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCars.TestRepositories", "MyCars.EntityFrameworkData\MyCars.TestRepositories.csproj", "{D0B5C4F1-3DCA-4A4C-9FC7-50037957AA59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D41E2FBC-C67A-45CA-BEB5-721A9346BEB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D41E2FBC-C67A-45CA-BEB5-721A9346BEB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D41E2FBC-C67A-45CA-BEB5-721A9346BEB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B5C4F1-3DCA-4A4C-9FC7-50037957AA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B5C4F1-3DCA-4A4C-9FC7-50037957AA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B5C4F1-3DCA-4A4C-9FC7-50037957AA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B5C4F1-3DCA-4A4C-9FC7-50037957AA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
 ﻿using MyCars.Core.Models;
+using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,44 +9,50 @@ namespace MyCars.Core.Services
 {
     public class CarService : ICarService
     {
-        public Car Get(int id)
+        private readonly ICarRepository _carRepository;
+
+        public CarService(ICarRepository carRepository)
         {
-            return new Car
-            {
-                CarId = 1,
-                CarName = "Моя первая машина",
-                Brand = "Nissan Qashqai",
-                IssueYear = new DateTime(2009, 1, 1),
-                VIN = "AHDN29ADXGP2",
-                Numberplate = "М329ОР"
-            };
+            _carRepository = carRepository;
         }
 
-        public IEnumerable<Car> GetAll()
+        public Car Add(Car car, int userId)
         {
-            var cars = new List<Car>
-            {
-                new Car
-                {
-                    CarId = 1,
-                    CarName = "Моя первая машина",
-                    Brand = "Nissan Qashqai",
-                    IssueYear = new DateTime(2009, 1, 1),
-                    VIN = "AHDN29ADXGP2",
-                    Numberplate = "М329ОР"
-                },
-                new Car
-                {
-                    CarId = 2,
-                    CarName = "Жигуль",
-                    Brand = "LADA 2105",
-                    IssueYear = new DateTime(2001, 1, 1),
-                    VIN = "XGDW31ATIYP1",
-                    Numberplate = "РО450Т"
-                }
-            };
+            car.UserId = userId;
 
-            return cars;
+            try
+            {
+                return _carRepository.Add(car);
+            } catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message);
+            }
+        }
+
+        public bool DeleteById(int carId, int userId)
+        {
+            var car = _carRepository.GetById(carId);
+
+            return car.UserId == userId ? _carRepository.DeleteById(carId) : false;
+        }
+
+        public Car GetById(int carId, int userId)
+        {
+            var car = _carRepository.GetById(carId);
+
+            return car.UserId == userId ? car : null;
+        }
+
+        public IEnumerable<Car> GetAllByUserId(int userId)
+        {
+            return _carRepository.GetAllByUserId(userId);
+        }
+
+        public Car Update(Car car, int userId)
+        {
+            var carFromRepo = _carRepository.GetById(car.CarId);
+
+            return carFromRepo.UserId == userId ? _carRepository.Update(car) : null;
         }
     }
 }

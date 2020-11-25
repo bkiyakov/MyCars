@@ -7,7 +7,10 @@ namespace MyCars.Core.Services.Interfaces
 {
     public interface ICarService
     {
-        IEnumerable<Car> GetAll();
-        Car Get(int id);
+        IEnumerable<Car> GetAllByUserId(int userId);
+        Car GetById(int carId, int userId);
+        Car Add(Car car, int userId);
+        bool DeleteById(int carId, int userId);
+        Car Update(Car car, int userId);
     }
 }

@@ -1,7 +1,13 @@
-﻿using System;
+﻿using MyCars.API.Controllers;
+using MyCars.Core.Services;
+using MyCars.Core.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Unity;
+using Unity.Injection;
+using Unity.Lifetime;
 
 namespace MyCars.API
 {

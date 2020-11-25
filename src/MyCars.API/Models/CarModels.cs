@@ -17,9 +17,12 @@ namespace MyCars.API.Models
         {
             CarList = new List<GetResponseModel>();
 
-            foreach (var car in cars)
+            if (cars != null && cars.Count() > 0)
             {
-                CarList.Add(new GetResponseModel(car));
+                foreach (var car in cars)
+                {
+                    CarList.Add(new GetResponseModel(car));
+                }
             }
         }
     }
@@ -32,6 +35,10 @@ namespace MyCars.API.Models
         public DateTime IssueYear { get; set; }
         public string VIN { get; set; }
         public string Numberplate { get; set; }
+        //public int UserId { get; set; }
+        //public DateTimeOffset Created { get; set; }
+        //public DateTimeOffset Modified { get; set; }
+
         public GetResponseModel()
         {
 
@@ -39,16 +46,16 @@ namespace MyCars.API.Models
 
         public GetResponseModel(Car car)
         {
-            CarId = car.CarId;
-            CarName = car.CarName;
-            Brand = car.Brand;
-            IssueYear = car.IssueYear;
-            VIN = car.VIN;
-            Numberplate = car.Numberplate;
+            if (car != null)
+            {
+                CarId = car.CarId;
+                CarName = car.CarName;
+                Brand = car.Brand;
+                IssueYear = car.IssueYear;
+                VIN = car.VIN;
+                Numberplate = car.Numberplate;
+            }
         }
-        //public int UserId { get; set; }
-        //public DateTimeOffset Created { get; set; }
-        //public DateTimeOffset Modified { get; set; }
 
     }
 }
