@@ -1,4 +1,5 @@
 ﻿using MyCars.API.Models;
+using MyCars.Core.Exceptions;
 using MyCars.Core.Models;
 using MyCars.Core.Services.Interfaces;
 using System;
@@ -58,15 +59,39 @@ namespace MyCars.API.Controllers
                 Numberplate = model.Numberplate
             };
 
-            try
-            {
-                var addedCar = _carService.Add(car, userId);
+            var addedCar = _carService.Add(car, userId);
 
-                return Created($"api/Car/Get/{addedCar.CarId}",new GetResponseModel(addedCar));
-            } catch (Exception ex)
+            return Created($"api/Car/Get/{addedCar.CarId}",new GetResponseModel(addedCar));
+        }
+
+        [HttpPost]
+        [Route("Update/{id}")]
+        public IHttpActionResult Update(int id, [FromBody] AddRequestModel model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var userId = 1;  // TODO take a real id
+
+            Car car = new Car
             {
-                return new ExceptionResult(ex.Message);
-            }
+                CarId = id,
+                CarName = model.CarName,
+                IssueYear = model.IssueYear,
+                VIN = model.VIN,
+                Brand = model.Brand,
+                Numberplate = model.Numberplate
+            };
+
+            return Ok(_carService.Update(car, userId));
+        }
+
+        [HttpDelete]
+        [Route("Delete/{id}")]
+        public IHttpActionResult Delete(int id)
+        {
+            var userId = 1; //  TODO take a real id
+
+            return _carService.DeleteById(id, userId) ? Ok() : throw new CommonException();
         }
     }
 }

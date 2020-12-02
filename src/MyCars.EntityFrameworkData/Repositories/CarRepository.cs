@@ -1,4 +1,5 @@
-﻿using MyCars.Core.Models;
+﻿using MyCars.Core.Exceptions;
+using MyCars.Core.Models;
 using MyCars.Core.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -6,29 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyCars.EntityFrameworkData.Repositories
+namespace MyCars.TestRepositories.Repositories
 {
     public class CarRepository : ICarRepository
     {
-        public Car GetById(int carId)
+        private List<Car> carList = new List<Car>
         {
-            return new Car
-            {
-                CarId = carId,
-                CarName = "Моя первая машина",
-                Brand = "Nissan Qashqai",
-                IssueYear = new DateTime(2009, 1, 1),
-                VIN = "AHDN29ADXGP2",
-                Numberplate = "М329ОР",
-                UserId = 1
-            };
-        }
-
-        public IEnumerable<Car> GetAllByUserId(int userId)
-        {
-            var cars = new List<Car>
-            {
-                new Car
+            new Car
                 {
                     CarId = 1,
                     CarName = "Моя первая машина",
@@ -47,10 +32,35 @@ namespace MyCars.EntityFrameworkData.Repositories
                     VIN = "XGDW31ATIYP1",
                     Numberplate = "РО450Т",
                     UserId = 1
+                },
+                new Car
+                {
+                    CarId = 3,
+                    CarName = "Honda",
+                    Brand = "Honda Civic",
+                    IssueYear = new DateTime(2010, 1, 1),
+                    VIN = "VGDD12ATNYP4",
+                    Numberplate = "ТВ421Р",
+                    UserId = 2
                 }
-            };
+        };
 
-            return cars;
+        public Car GetById(int carId)
+        {
+            var carDb = carList.Where<Car>(car => car.CarId == carId).FirstOrDefault();
+
+            if (carDb != null)
+            {
+                return carDb;
+            } else
+            {
+                throw new NotFoundException();
+            }
+        }
+
+        public IEnumerable<Car> GetAllByUserId(int userId)
+        {
+            return carList.Where<Car>(car => car.UserId == userId).ToList();
         }
 
         public Car Add(Car model)

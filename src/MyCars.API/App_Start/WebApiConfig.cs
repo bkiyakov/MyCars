@@ -1,4 +1,5 @@
 ﻿using MyCars.API.Controllers;
+using MyCars.API.ExceptionFilters;
 using MyCars.Core.Services;
 using MyCars.Core.Services.Interfaces;
 using System;
@@ -25,6 +26,11 @@ namespace MyCars.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // Регистрация фильтров исключений
+            config.Filters.Add(new NotFoundExceptionFilterAttribute());
+            config.Filters.Add(new ForbiddenExceptionFilterAttribute());
+            config.Filters.Add(new CommonExceptionFilterAttribute());
         }
     }
 }

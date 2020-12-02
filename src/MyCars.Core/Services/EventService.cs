@@ -1,4 +1,5 @@
-﻿using MyCars.Core.Models;
+﻿using MyCars.Core.Exceptions;
+using MyCars.Core.Models;
 using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services.Interfaces;
 using System;
@@ -25,7 +26,14 @@ namespace MyCars.Core.Services
         {
             var eventModel = _eventRepository.GetById(eventId);
 
-            return eventModel.UserId == userId ? _eventRepository.DeleteById(eventId) : false;
+            if (eventModel.UserId == userId)
+            {
+                return _eventRepository.DeleteById(eventId);
+            }
+            else
+            {
+                throw new NotFoundException();
+            }
         }
 
         public IEnumerable<Event> GetAllByUserId(int userId)
@@ -37,14 +45,28 @@ namespace MyCars.Core.Services
         {
             var eventModel = _eventRepository.GetById(eventId);
 
-            return eventModel.UserId == userId ? eventModel : null;
+            if (eventModel.UserId == userId)
+            {
+                return eventModel;
+            }
+            else
+            {
+                throw new NotFoundException();
+            }
         }
 
         public Event Update(Event eventModel, int userId)
         {
             var eventFromRepo = _eventRepository.GetById(eventModel.EventId);
 
-            return eventFromRepo.UserId == userId ? _eventRepository.Update(eventModel) : null;
+            if (eventFromRepo.UserId == userId)
+            {
+                return _eventRepository.Update(eventModel);
+            }
+            else
+            {
+                throw new NotFoundException();
+            }
         }
     }
 }

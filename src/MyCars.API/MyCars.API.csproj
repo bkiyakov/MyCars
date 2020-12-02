@@ -125,6 +125,8 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="ExceptionFilters\ForbiddenExceptionFilterAttribute.cs" />
+    <Compile Include="ExceptionFilters\NotFoundExceptionFilterAttribute.cs" />
     <Compile Include="Models\AddRequestModel.cs" />
     <Compile Include="Controllers\CarController.cs" />
     <Compile Include="Global.asax.cs">

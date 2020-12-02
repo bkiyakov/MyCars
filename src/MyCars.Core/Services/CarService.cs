@@ -1,4 +1,5 @@
-﻿using MyCars.Core.Models;
+﻿using MyCars.Core.Exceptions;
+using MyCars.Core.Models;
 using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services.Interfaces;
 using System;
@@ -20,27 +21,34 @@ namespace MyCars.Core.Services
         {
             car.UserId = userId;
 
-            try
-            {
-                return _carRepository.Add(car);
-            } catch (Exception ex)
-            {
-                throw new ApplicationException(ex.Message);
-            }
+            return _carRepository.Add(car);
         }
 
         public bool DeleteById(int carId, int userId)
         {
             var car = _carRepository.GetById(carId);
 
-            return car.UserId == userId ? _carRepository.DeleteById(carId) : false;
+            if (car.UserId == userId)
+            {
+                return _carRepository.DeleteById(carId);
+            }
+            else
+            {
+                throw new NotFoundException();
+            }
         }
 
         public Car GetById(int carId, int userId)
         {
             var car = _carRepository.GetById(carId);
 
-            return car.UserId == userId ? car : null;
+            if (car.UserId == userId)
+            {
+                return car;
+            } else
+            {
+                throw new NotFoundException();
+            }
         }
 
         public IEnumerable<Car> GetAllByUserId(int userId)
@@ -52,7 +60,14 @@ namespace MyCars.Core.Services
         {
             var carFromRepo = _carRepository.GetById(car.CarId);
 
-            return carFromRepo.UserId == userId ? _carRepository.Update(car) : null;
+            if (carFromRepo.UserId == userId)
+            {
+                return _carRepository.Update(car);
+            }
+            else
+            {
+                throw new NotFoundException();
+            }
         }
     }
 }
