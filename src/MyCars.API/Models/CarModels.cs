@@ -8,11 +8,7 @@ namespace MyCars.API.Models
 {
     public class GetAllResponseModel
     {
-        public List<GetResponseModel> CarList { get; set; }
-        public GetAllResponseModel()
-        {
-
-        }
+        public List<GetResponseModel> CarList { get; private set; }
         public GetAllResponseModel(IEnumerable<Car> cars)
         {
             CarList = new List<GetResponseModel>();
@@ -29,20 +25,15 @@ namespace MyCars.API.Models
 
     public class GetResponseModel
     {
-        public int CarId { get; set; }
-        public string CarName { get; set; }
-        public string Brand { get; set; }
-        public DateTime IssueYear { get; set; }
-        public string VIN { get; set; }
-        public string Numberplate { get; set; }
+        public int CarId { get; private set; }
+        public string CarName { get; private set; }
+        public string Brand { get; private set; }
+        public DateTime IssueYear { get; private set; }
+        public string VIN { get; private set; }
+        public string Numberplate { get; private set; }
         //public int UserId { get; set; }
         //public DateTimeOffset Created { get; set; }
         //public DateTimeOffset Modified { get; set; }
-
-        public GetResponseModel()
-        {
-
-        }
 
         public GetResponseModel(Car car)
         {
