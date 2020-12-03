@@ -135,6 +135,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CarModels.cs" />
+    <Compile Include="Models\EventModels.cs" />
     <Compile Include="Models\ExceptionModel.cs" />
     <Compile Include="Models\ExceptionResult.cs" />
     <Compile Include="Models\UpdateRequestModel.cs" />
