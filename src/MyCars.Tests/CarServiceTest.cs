@@ -15,13 +15,14 @@ namespace MyCars.Tests
     [TestClass]
     public class CarServiceTest
     {
-        private readonly ICarRepository MockCarRepository;
+        private readonly ICarRepository _mockCarRepository;
         private readonly ICarService carService;
+        private readonly IList<CarEntity> carList;
 
         public CarServiceTest()
         {
             // create some mock cars to play with
-            IList<CarEntity> carList = new List<CarEntity>
+            carList = new List<CarEntity>
             {
                 new CarEntity
                     {
@@ -100,13 +101,48 @@ namespace MyCars.Tests
                     return carList.Where(c => c.CarId == newId).FirstOrDefault().ToDomain();
                 });
 
-            // TODO Delete car by id
-            // TODO Update car
+            // Delete car by id
+            mockCarRepository.Setup(mr => mr.DeleteById(It.IsAny<int>()))
+                .Returns((int carId) =>
+                {
+                    var car = carList.Where(carFromList => carFromList.CarId == carId).FirstOrDefault();
 
-            MockCarRepository = mockCarRepository.Object;
-            carService = new CarService(MockCarRepository);
+                    if (car != null)
+                    {
+                        return carList.Remove(car);
+                    }
+                    else
+                    {
+                        return false; // Нужно выбросить исключение NotFound, но это Moq
+                    }
+                });
+
+            // Update car
+            mockCarRepository.Setup(mr => mr.Update(It.IsAny<Car>()))
+                .Returns((Car newCar) =>
+                {
+                    carList.Where(car => car.CarId == newCar.CarId)
+                        .Select(c =>
+                        {
+                            c.CarName = newCar.CarName;
+                            c.Brand = newCar.Brand;
+                            c.IssueYear = newCar.IssueYear;
+                            c.VIN = newCar.VIN;
+                            c.Numberplate = newCar.Numberplate;
+                            c.UserId = newCar.UserId;
+                            c.Modified = DateTime.Now;
+
+                            return c;
+                        }).ToList();
+
+                    return carList.FirstOrDefault(c => c.CarId == newCar.CarId)?.ToDomain();
+                });
+
+            _mockCarRepository = mockCarRepository.Object;
+            carService = new CarService(_mockCarRepository);
         }
 
+        // Проверка на получение всех автомобилей пользователя
         [TestMethod]
         public void CanReturnAllUsersCars()
         {
@@ -120,6 +156,9 @@ namespace MyCars.Tests
             Assert.AreEqual(1, carsSecondUser.Count);
         }
 
+        /// <summary>
+        /// Проверка на получение автомобиля пользователя
+        /// </summary>
         [TestMethod]
         public void CanReturnCarByIdWithAllowedUser()
         {
@@ -130,11 +169,83 @@ namespace MyCars.Tests
             Assert.AreEqual(1, car.CarId);
         }
 
+        /// <summary>
+        /// Проверка на ошибку при попытке получения чужого автомобиля
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(NotFoundException))]
         public void CanNotReturnCarByIdWithNotAllowedUser()
         {
             Car car = carService.GetById(3, 1);
+        }
+
+        /// <summary>
+        /// Проверка на удаление автомобиля пользоваетелем
+        /// </summary>
+        [TestMethod]
+        public void CanDeleteCarByIdWithAllowedUser()
+        {
+            bool success = carService.DeleteById(1, 1);
+            var deletedCar = carList.Where(car => car.CarId == 1).FirstOrDefault();
+
+            Assert.IsTrue(success);
+            Assert.IsNull(deletedCar);
+        }
+
+        /// <summary>
+        /// Проверка на ошибку при попытке удаления чужого автомобиля
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(NotFoundException))]
+        public void CanNotDeleteCarByIdWithNotAllowedUser()
+        {
+            bool success = carService.DeleteById(3, 1);
+        }
+
+        /// <summary>
+        /// Проверка на обновление автомобиля
+        /// </summary>
+        [TestMethod]
+        public void CanUpdateCarWithAllowedUser()
+        {
+            Car newCar = new Car()
+            {
+                CarId = 3,
+                CarName = "Honda Super",
+                Brand = "Honda Civic Restyle",
+                IssueYear = new DateTime(2011, 1, 1),
+                VIN = "VGDD12ATNYP3",
+                Numberplate = "ТВ411Р"
+            };
+
+            Car updatedCar = carService.Update(newCar, 2);
+
+            Assert.IsNotNull(updatedCar);
+            Assert.AreEqual("Honda Super", updatedCar.CarName);
+            Assert.AreEqual("Honda Civic Restyle", updatedCar.Brand);
+            Assert.AreEqual(new DateTime(2011, 1, 1), updatedCar.IssueYear);
+            Assert.AreEqual("VGDD12ATNYP3", updatedCar.VIN);
+            Assert.AreEqual("ТВ411Р", updatedCar.Numberplate);
+        }
+
+        /// <summary>
+        /// Проверка на ошибку при попытке обновления чужого автомобиля
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(NotFoundException))]
+        public void CanNotUpdateWithNotAllowedUser()
+        {
+            Car newCar = new Car()
+            {
+                CarId = 3,
+                CarName = "Honda Super",
+                Brand = "Honda Civic Restyle",
+                IssueYear = new DateTime(2011, 1, 1),
+                VIN = "VGDD12ATNYP3",
+                Numberplate = "ТВ411Р"
+            };
+
+            Car updatedCar = carService.Update(newCar, 1);
         }
     }
 }
