@@ -44,4 +44,14 @@ namespace MyCars.API.Models
         public int Milieage { get; private set; }
         public string Text { get; private set; }
     }
+
+    public class EventAddRequestModel
+    {
+        public DateTime EventDate { get; private set; }
+        public int EventTypeId { get; private set; }
+        public int CarId { get; private set; }
+        public int Milieage { get; private set; }
+        public string Text { get; private set; }
+    }
+
 }
