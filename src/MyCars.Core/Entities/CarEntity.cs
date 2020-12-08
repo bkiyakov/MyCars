@@ -13,19 +13,5 @@ namespace MyCars.Core.Entities
         public DateTime IssueYear { get; set; }
         public string VIN { get; set; }
         public string Numberplate { get; set; }
-
-        public Car ToDomain()
-        {
-            return new Car()
-            {
-                CarId = CarId,
-                CarName = CarName,
-                Brand = Brand,
-                IssueYear = IssueYear,
-                VIN = VIN,
-                Numberplate = Numberplate,
-                UserId = UserId
-            };
-        }
     }
 }

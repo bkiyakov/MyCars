@@ -9,57 +9,58 @@ using MyCars.Core.Services;
 using MyCars.Core.Services.Interfaces;
 using MyCars.Core.Exceptions;
 using Moq;
+using MyCars.Core.Mappers;
 
-namespace MyCars.Tests
+namespace MyCars.Tests.ServiceTests
 {
     [TestClass]
-    public class CarServiceTest
+    public class CarServiceTests
     {
         private readonly ICarRepository _mockCarRepository;
         private readonly ICarService carService;
         private readonly IList<CarEntity> carList;
 
-        public CarServiceTest()
+        public CarServiceTests()
         {
             // create some mock cars to play with
             carList = new List<CarEntity>
             {
                 new CarEntity
-                    {
-                        CarId = 1,
-                        CarName = "Моя первая машина",
-                        Brand = "Nissan Qashqai",
-                        IssueYear = new DateTime(2009, 1, 1),
-                        VIN = "AHDN29ADXGP2",
-                        Numberplate = "М329ОР",
-                        UserId = 1,
-                        Created = new DateTime(2020, 10, 6, 12, 0, 35),
-                        Modified = new DateTime(2020, 10, 6, 12, 0, 35)
-                    },
-                    new CarEntity
-                    {
-                        CarId = 2,
-                        CarName = "Жигуль",
-                        Brand = "LADA 2105",
-                        IssueYear = new DateTime(2001, 1, 1),
-                        VIN = "XGDW31ATIYP1",
-                        Numberplate = "РО450Т",
-                        UserId = 1,
-                        Created = new DateTime(2020, 11, 14, 10, 12, 23),
-                        Modified = new DateTime(2020, 11, 14, 12, 53, 14)
-                    },
-                    new CarEntity
-                    {
-                        CarId = 3,
-                        CarName = "Honda",
-                        Brand = "Honda Civic",
-                        IssueYear = new DateTime(2010, 1, 1),
-                        VIN = "VGDD12ATNYP4",
-                        Numberplate = "ТВ421Р",
-                        UserId = 2,
-                        Created = new DateTime(2020, 11, 23, 22, 10, 5),
-                        Modified = new DateTime(2020, 11, 28, 16, 40, 24)
-                    }
+                {
+                    CarId = 1,
+                    CarName = "Моя первая машина",
+                    Brand = "Nissan Qashqai",
+                    IssueYear = new DateTime(2009, 1, 1),
+                    VIN = "AHDN29ADXGP2",
+                    Numberplate = "М329ОР",
+                    UserId = 1,
+                    Created = new DateTime(2020, 10, 6, 12, 0, 35),
+                    Modified = new DateTime(2020, 10, 6, 12, 0, 35)
+                },
+                new CarEntity
+                {
+                    CarId = 2,
+                    CarName = "Жигуль",
+                    Brand = "LADA 2105",
+                    IssueYear = new DateTime(2001, 1, 1),
+                    VIN = "XGDW31ATIYP1",
+                    Numberplate = "РО450Т",
+                    UserId = 1,
+                    Created = new DateTime(2020, 11, 14, 10, 12, 23),
+                    Modified = new DateTime(2020, 11, 14, 12, 53, 14)
+                },
+                new CarEntity
+                {
+                    CarId = 3,
+                    CarName = "Honda",
+                    Brand = "Honda Civic",
+                    IssueYear = new DateTime(2010, 1, 1),
+                    VIN = "VGDD12ATNYP4",
+                    Numberplate = "ТВ421Р",
+                    UserId = 2,
+                    Created = new DateTime(2020, 11, 23, 22, 10, 5),
+                    Modified = new DateTime(2020, 11, 28, 16, 40, 24)
+                }
             };
 
             // Mock the Cars Repository using Moq
