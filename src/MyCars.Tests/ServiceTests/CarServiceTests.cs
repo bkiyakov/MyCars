@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyCars.Core.Repositories.Interfaces;
-using MyCars.Core.Models;
 using MyCars.Core.Entities;
 using MyCars.Core.Services;
 using MyCars.Core.Services.Interfaces;
 using MyCars.Core.Exceptions;
 using Moq;
-using MyCars.Core.Mappers;
 
 namespace MyCars.Tests.ServiceTests
 {
@@ -18,14 +16,14 @@ namespace MyCars.Tests.ServiceTests
     {
         private readonly ICarRepository _mockCarRepository;
         private readonly ICarService carService;
-        private readonly IList<CarEntity> carList;
+        private readonly IList<Core.Entities.Car> carList;
 
         public CarServiceTests()
         {
             // create some mock cars to play with
-            carList = new List<CarEntity>
+            carList = new List<Core.Entities.Car>
             {
-                new CarEntity
+                new Car
                 {
                     CarId = 1,
                     CarName = "Моя первая машина",
@@ -37,7 +35,7 @@ namespace MyCars.Tests.ServiceTests
                     Created = new DateTime(2020, 10, 6, 12, 0, 35),
                     Modified = new DateTime(2020, 10, 6, 12, 0, 35)
                 },
-                new CarEntity
+                new Car
                 {
                     CarId = 2,
                     CarName = "Жигуль",
@@ -49,7 +47,7 @@ namespace MyCars.Tests.ServiceTests
                     Created = new DateTime(2020, 11, 14, 10, 12, 23),
                     Modified = new DateTime(2020, 11, 14, 12, 53, 14)
                 },
-                new CarEntity
+                new Car
                 {
                     CarId = 3,
                     CarName = "Honda",
@@ -68,15 +66,12 @@ namespace MyCars.Tests.ServiceTests
 
             // Return all the cars
             mockCarRepository.Setup(mr => mr.GetAllByUserId(It.IsAny<int>()))
-                .Returns((int userId) => from CarEntity carEntity in carList
-                                         where carEntity.UserId == userId
-                                         select carEntity.ToDomain());
+                .Returns((int userId) => (carList.Where(c => c.UserId == userId)));
 
             // Return car by id
             mockCarRepository.Setup(mr => mr.GetById(It.IsAny<int>()))
                 .Returns((int carId) => carList.Where(c => c.CarId == carId)
-                .FirstOrDefault()?
-                .ToDomain());
+                .FirstOrDefault());
 
             // Add car
             mockCarRepository.Setup(mr => mr.Add(It.IsAny<Car>()))
@@ -84,22 +79,11 @@ namespace MyCars.Tests.ServiceTests
                 {
                     int newId = carList.Count + 1;
 
-                    CarEntity newCarEntity = new CarEntity
-                    {
-                        CarId = newId,
-                        CarName = car.CarName,
-                        Brand = car.Brand,
-                        IssueYear = car.IssueYear,
-                        VIN = car.VIN,
-                        Numberplate = car.Numberplate,
-                        UserId = car.UserId,
-                        Created = DateTime.Now,
-                        Modified = DateTime.Now
-                    };
+                    car.CarId = newId;
 
-                    carList.Add(newCarEntity);
+                    carList.Add(car);
 
-                    return carList.Where(c => c.CarId == newId).FirstOrDefault().ToDomain();
+                    return carList.Where(c => c.CarId == newId).FirstOrDefault();
                 });
 
             // Delete car by id
@@ -131,12 +115,13 @@ namespace MyCars.Tests.ServiceTests
                             c.VIN = newCar.VIN;
                             c.Numberplate = newCar.Numberplate;
                             c.UserId = newCar.UserId;
-                            c.Modified = DateTime.Now;
+                            c.Created = newCar.Created;
+                            c.Modified = newCar.Modified;
 
                             return c;
                         }).ToList();
 
-                    return carList.FirstOrDefault(c => c.CarId == newCar.CarId)?.ToDomain();
+                    return carList.FirstOrDefault(c => c.CarId == newCar.CarId);
                 });
 
             _mockCarRepository = mockCarRepository.Object;

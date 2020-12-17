@@ -1,4 +1,4 @@
-﻿using MyCars.Core.Models;
+﻿using MyCars.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,27 +31,30 @@ namespace MyCars.API.Models
             {
                 EventId = eventModel.EventId;
                 EventDate = eventModel.EventDate;
-                EventTypeId = eventModel.EventType.EventTypeId;
-                CarId = eventModel.Car.CarId;
+                EventTypeName = eventModel.EventType.EventTypeName;
+                CarGetResponseModel = new CarGetResponseModel(eventModel.Car);
                 Milieage = eventModel.Milieage;
                 Text = eventModel.Text;
+            } else
+            {
+                throw new ArgumentNullException();
             }
         }
-        public int EventId { get; private set; }
-        public DateTime EventDate { get; private set; }
-        public int EventTypeId { get; private set; }
-        public int CarId { get; private set; }
-        public int Milieage { get; private set; }
-        public string Text { get; private set; }
+        public int EventId { get; set; }
+        public DateTime EventDate { get; set; }
+        public string EventTypeName { get; set; }
+        public CarGetResponseModel CarGetResponseModel { get; set; }
+        public int Milieage { get; set; }
+        public string Text { get; set; }
     }
 
     public class EventAddRequestModel
     {
-        public DateTime EventDate { get; private set; }
-        public int EventTypeId { get; private set; }
-        public int CarId { get; private set; }
-        public int Milieage { get; private set; }
-        public string Text { get; private set; }
+        public DateTime EventDate { get; set; }
+        public int EventTypeId { get; set; }
+        public int CarId { get; set; }
+        public int Milieage { get; set; }
+        public string Text { get; set; }
     }
 
 }

@@ -1,6 +1,6 @@
 ﻿using MyCars.API.Models;
 using MyCars.Core.Exceptions;
-using MyCars.Core.Models;
+using MyCars.Core.Entities;
 using MyCars.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ using System.Web.Http;
 
 namespace MyCars.API.Controllers
 {
+    [RoutePrefix("api/Event")]
     public class EventController : ApiController
     {
         private readonly IEventService _eventService;
@@ -53,14 +54,8 @@ namespace MyCars.API.Controllers
             Event eventModel = new Event
             {
                 EventDate = model.EventDate,
-                EventType = new EventType()
-                {
-                    EventTypeId = model.EventTypeId
-                },
-                Car = new Car()
-                {
-                    CarId = model.CarId
-                },
+                EventTypeId = model.EventTypeId,
+                CarId = model.CarId,
                 Milieage = model.Milieage,
                 Text = model.Text
             };
@@ -82,14 +77,8 @@ namespace MyCars.API.Controllers
             {
                 EventId = id,
                 EventDate = model.EventDate,
-                EventType = new EventType()
-                {
-                    EventTypeId = model.EventTypeId
-                },
-                Car = new Car()
-                {
-                    CarId = model.CarId
-                },
+                EventTypeId = model.EventTypeId,
+                CarId = model.CarId,
                 Milieage = model.Milieage,
                 Text = model.Text
             };

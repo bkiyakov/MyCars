@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyCars.API.Models
 {
-    public class AddRequestModel
+    public class CarAddRequestModel
     {
         [Required]
         [StringLength(32, ErrorMessage = "Максимальная длина имени автомобиля 32 символа")]

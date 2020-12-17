@@ -1,6 +1,6 @@
 ﻿using MyCars.API.Models;
 using MyCars.Core.Exceptions;
-using MyCars.Core.Models;
+using MyCars.Core.Entities;
 using MyCars.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace MyCars.API.Controllers
 
             var cars = _carService.GetAllByUserId(userId);
 
-            return Json(new GetAllResponseModel(cars));
+            return Json(new CarGetAllResponseModel(cars));
         }
 
         [HttpGet]
@@ -39,12 +39,12 @@ namespace MyCars.API.Controllers
 
             var car = _carService.GetById(id, userId);
 
-            return Json(new GetResponseModel(car));
+            return Json(new CarGetResponseModel(car));
         }
 
         [HttpPost]
         [Route("Add")]
-        public IHttpActionResult Add([FromBody] AddRequestModel model)
+        public IHttpActionResult Add([FromBody] CarAddRequestModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -61,12 +61,12 @@ namespace MyCars.API.Controllers
 
             var addedCar = _carService.Add(car, userId);
 
-            return Created($"api/Car/Get/{addedCar.CarId}",new GetResponseModel(addedCar));
+            return Created($"api/Car/Get/{addedCar.CarId}",new CarGetResponseModel(addedCar));
         }
 
         [HttpPost]
         [Route("Update/{id}")]
-        public IHttpActionResult Update(int id, [FromBody] AddRequestModel model)
+        public IHttpActionResult Update(int id, [FromBody] CarAddRequestModel model)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

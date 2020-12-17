@@ -2,16 +2,12 @@
 using Moq;
 using MyCars.Core.Entities;
 using MyCars.Core.Exceptions;
-using MyCars.Core.Mappers;
-using MyCars.Core.Models;
 using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services;
 using MyCars.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyCars.Tests.ServiceTests
 {
@@ -20,97 +16,101 @@ namespace MyCars.Tests.ServiceTests
     {
         private readonly IEventRepository _mockEventRepository;
         private readonly IEventService _eventService;
-        private readonly IList<EventEntity> eventList;
+        private readonly IList<Event> eventList;
+        private readonly IList<EventType> eventTypeList;
+        private readonly IList<Car> carList;
 
         public EventServiceTests()
         {
             // create some mock events to play with
-            eventList = new List<EventEntity>
+            eventList = new List<Event>
             {
-                new EventEntity
+                new Event
                 {
                     EventId = 1,
                     EventDate = new DateTime(2020, 9, 29, 12, 0, 35),
                     EventTypeId = 1,
-                    EventType = new EventTypeEntity()
-                    {
-                        EventTypeId = 1,
-                        EventTypeName = "Ремонт"
-                    },
                     CarId = 1,
-                    Car = new CarEntity
-                    {
-                        CarId = 1,
-                        CarName = "Моя первая машина",
-                        Brand = "Nissan Qashqai",
-                        IssueYear = new DateTime(2009, 1, 1),
-                        VIN = "AHDN29ADXGP2",
-                        Numberplate = "М329ОР",
-                        UserId = 1,
-                        Created = new DateTime(2020, 10, 6, 12, 0, 35),
-                        Modified = new DateTime(2020, 10, 6, 12, 0, 35)
-                    },
                     Milieage = 23456,
                     Text = "It's my first event!!!",
                     UserId = 1,
                     Created = new DateTime(2020, 10, 6, 12, 0, 35),
                     Modified = new DateTime(2020, 10, 6, 12, 0, 35)
                 },
-                new EventEntity
+                new Event
                 {
                     EventId = 2,
                     EventDate = new DateTime(2020, 11, 10, 10, 0, 35),
                     EventTypeId = 2,
-                    EventType = new EventTypeEntity()
-                    {
-                        EventTypeId = 2,
-                        EventTypeName = "Комментарий"
-                    },
                     CarId = 2,
-                    Car =
-                    new CarEntity
-                    {
-                        CarId = 2,
-                        CarName = "Жигуль",
-                        Brand = "LADA 2105",
-                        IssueYear = new DateTime(2001, 1, 1),
-                        VIN = "XGDW31ATIYP1",
-                        Numberplate = "РО450Т",
-                        UserId = 1,
-                        Created = new DateTime(2020, 11, 14, 10, 12, 23),
-                        Modified = new DateTime(2020, 11, 14, 12, 53, 14)
-                    },
                     Milieage = 232456,
                     Text = "It's my second event!",
                     UserId = 1,
                     Created = new DateTime(2020, 11, 14, 10, 12, 23),
                     Modified = new DateTime(2020, 11, 14, 12, 53, 14)
                 },
-                new EventEntity
+                new Event
                 {
                     EventId = 3,
                     EventDate = new DateTime(2020, 11, 23, 12, 0, 35),
                     EventTypeId = 1,
-                    EventType = new EventTypeEntity()
-                    {
-                        EventTypeId = 1,
-                        EventTypeName = "Ремонт"
-                    },
                     CarId = 3,
-                    Car = new CarEntity
-                    {
-                        CarId = 3,
-                        CarName = "Honda",
-                        Brand = "Honda Civic",
-                        IssueYear = new DateTime(2010, 1, 1),
-                        VIN = "VGDD12ATNYP4",
-                        Numberplate = "ТВ421Р",
-                        UserId = 2,
-                        Created = new DateTime(2020, 11, 23, 22, 10, 5),
-                        Modified = new DateTime(2020, 11, 28, 16, 40, 24)
-                    },
                     Milieage = 23456,
                     Text = "Bla bla bla bla whatever",
+                    UserId = 2,
+                    Created = new DateTime(2020, 11, 23, 22, 10, 5),
+                    Modified = new DateTime(2020, 11, 28, 16, 40, 24)
+                }
+            };
+
+            eventTypeList = new List<EventType>()
+            {
+                new EventType()
+                {
+                    EventTypeId = 1,
+                    EventTypeName = "Ремонт"
+                },
+                new EventType()
+                {
+                    EventTypeId = 2,
+                    EventTypeName = "Комментарий"
+                }
+            };
+
+            carList = new List<Car>()
+            {
+                new Car
+                {
+                    CarId = 1,
+                    CarName = "Моя первая машина",
+                    Brand = "Nissan Qashqai",
+                    IssueYear = new DateTime(2009, 1, 1),
+                    VIN = "AHDN29ADXGP2",
+                    Numberplate = "М329ОР",
+                    UserId = 1,
+                    Created = new DateTime(2020, 10, 6, 12, 0, 35),
+                    Modified = new DateTime(2020, 10, 6, 12, 0, 35)
+                },
+                new Car
+                {
+                    CarId = 2,
+                    CarName = "Жигуль",
+                    Brand = "LADA 2105",
+                    IssueYear = new DateTime(2001, 1, 1),
+                    VIN = "XGDW31ATIYP1",
+                    Numberplate = "РО450Т",
+                    UserId = 1,
+                    Created = new DateTime(2020, 11, 14, 10, 12, 23),
+                    Modified = new DateTime(2020, 11, 14, 12, 53, 14)
+                },
+                new Car
+                {
+                    CarId = 3,
+                    CarName = "Honda",
+                    Brand = "Honda Civic",
+                    IssueYear = new DateTime(2010, 1, 1),
+                    VIN = "VGDD12ATNYP4",
+                    Numberplate = "ТВ421Р",
                     UserId = 2,
                     Created = new DateTime(2020, 11, 23, 22, 10, 5),
                     Modified = new DateTime(2020, 11, 28, 16, 40, 24)
@@ -122,15 +122,22 @@ namespace MyCars.Tests.ServiceTests
 
             // Return all the events
             mockEventRepository.Setup(mr => mr.GetAllByUserId(It.IsAny<int>()))
-                .Returns((int userId) => from EventEntity eventEntity in eventList
-                                         where eventEntity.UserId == userId
-                                         select eventEntity.ToDomain());
+                .Returns((int userId) =>
+                {
+                    return eventList.Where(e => e.UserId == userId)
+                        .Select(e =>
+                        {
+                            e.EventType = eventTypeList.Where(et => et.EventTypeId == e.EventTypeId).FirstOrDefault();
+                            e.Car = carList.Where(c => c.CarId == e.CarId).FirstOrDefault();
+
+                            return e;
+                        }).ToList();
+                });
 
             // Return event by id
             mockEventRepository.Setup(mr => mr.GetById(It.IsAny<int>()))
                 .Returns((int eventId) => eventList.Where(e => e.EventId == eventId)
-                .FirstOrDefault()?
-                .ToDomain());
+                .FirstOrDefault());
 
             // Add event
             mockEventRepository.Setup(mr => mr.Add(It.IsAny<Event>()))
@@ -138,22 +145,19 @@ namespace MyCars.Tests.ServiceTests
                 {
                     int newId = eventList.Count + 1;
 
-                    EventEntity newEventEntity = new EventEntity
+                    eventModel.EventId = newId;
+
+                    eventList.Add(eventModel);
+
+                    Event newEvent = eventList.Where(e => e.EventId == newId).FirstOrDefault();
+
+                    if(newEvent != null)
                     {
-                        EventId = newId,
-                        EventDate = new DateTime(2020, 12, 12, 12, 0, 35),
-                        EventTypeId = 2,
-                        CarId = 3,
-                        Milieage = 23460,
-                        Text = "This is new event",
-                        UserId = 2,
-                        Created = new DateTime(2020, 12, 13, 22, 10, 5),
-                        Modified = new DateTime(2020, 12, 13, 22, 10, 5)
-                    };
+                        newEvent.EventType = eventTypeList.Where(et => et.EventTypeId == newEvent.EventTypeId).FirstOrDefault();
+                        newEvent.Car = carList.Where(c => c.CarId == newEvent.CarId).FirstOrDefault();
+                    }
 
-                    eventList.Add(newEventEntity);
-
-                    return eventList.Where(e => e.EventId == newId).FirstOrDefault().ToDomain();
+                    return newEvent;
                 });
 
             // Delete event by id
@@ -180,17 +184,19 @@ namespace MyCars.Tests.ServiceTests
                         .Select(e =>
                         {
                             e.EventDate = newEvent.EventDate;
-                            e.EventTypeId = newEvent.EventType.EventTypeId;
-                            e.EventType.EventTypeId = newEvent.EventType.EventTypeId;
-                            e.CarId = newEvent.Car.CarId;
-                            e.Car.CarId = newEvent.Car.CarId;
+                            e.EventTypeId = newEvent.EventTypeId;
+                            e.CarId = newEvent.CarId;
                             e.Milieage = newEvent.Milieage;
                             e.Text = newEvent.Text;
+                            e.Created = newEvent.Created;
+                            e.Modified = newEvent.Modified;
+                            e.EventType = eventTypeList.Where(et => et.EventTypeId == newEvent.EventTypeId).FirstOrDefault();
+                            e.Car = carList.Where(c => c.CarId == newEvent.CarId).FirstOrDefault();
 
                             return e;
                         }).ToList();
 
-                    return eventList.FirstOrDefault(e => e.EventId == newEvent.EventId)?.ToDomain();
+                    return eventList.FirstOrDefault(e => e.EventId == newEvent.EventId);
                 });
 
             _mockEventRepository = mockEventRepository.Object;
@@ -267,14 +273,8 @@ namespace MyCars.Tests.ServiceTests
             {
                 EventId = 3,
                 EventDate = new DateTime(2020, 11, 24, 13, 22, 33),
-                EventType = new EventType()
-                {
-                    EventTypeId = 2
-                },
-                Car = new Car()
-                {
-                    CarId = 2
-                },
+                EventTypeId = 2,
+                CarId = 2,
                 Milieage = 234511,
                 Text = "New Text"
             };
@@ -283,6 +283,8 @@ namespace MyCars.Tests.ServiceTests
 
             Assert.IsNotNull(updatedEvent);
             Assert.AreEqual(new DateTime(2020, 11, 24, 13, 22, 33), updatedEvent.EventDate);
+            Assert.AreEqual(2, updatedEvent.EventTypeId);
+            Assert.AreEqual(2, updatedEvent.CarId);
             Assert.AreEqual(2, updatedEvent.EventType.EventTypeId);
             Assert.AreEqual(2, updatedEvent.Car.CarId);
             Assert.AreEqual(234511, updatedEvent.Milieage);

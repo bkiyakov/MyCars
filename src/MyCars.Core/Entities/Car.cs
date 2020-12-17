@@ -1,11 +1,10 @@
-﻿using MyCars.Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyCars.Core.Models
+namespace MyCars.Core.Entities
 {
-    public class Car
+    public class Car : BaseEntity
     {
         public int CarId { get; set; }
         public string CarName { get; set; }
@@ -13,6 +12,5 @@ namespace MyCars.Core.Models
         public DateTime IssueYear { get; set; }
         public string VIN { get; set; }
         public string Numberplate { get; set; }
-        public int UserId { get; set; }
     }
 }

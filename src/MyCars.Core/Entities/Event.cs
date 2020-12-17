@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MyCars.Core.Models
+namespace MyCars.Core.Entities
 {
-    public class Event
+    public class Event : BaseEntity
     {
         public int EventId { get; set; }
         public DateTime EventDate { get; set; }
-        public EventType EventType { get; set; }
-        public Car Car { get; set; }
+        public int EventTypeId { get; set; }
+        public virtual EventType EventType { get; set; }
+        public int CarId { get; set; }
+        public virtual Car Car { get; set; }
         public int Milieage { get; set; }
         public string Text { get; set; }
-        public int UserId { get; set; }
     }
 }

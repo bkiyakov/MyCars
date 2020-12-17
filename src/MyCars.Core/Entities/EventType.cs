@@ -2,7 +2,7 @@
 
 namespace MyCars.Core.Entities
 {
-    public class EventTypeEntity
+    public class EventType
     {
         public int EventTypeId { get; set; }
         public string EventTypeName { get; set; }

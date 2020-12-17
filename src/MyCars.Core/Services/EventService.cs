@@ -1,5 +1,5 @@
 ﻿using MyCars.Core.Exceptions;
-using MyCars.Core.Models;
+using MyCars.Core.Entities;
 using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services.Interfaces;
 using System;
@@ -18,6 +18,8 @@ namespace MyCars.Core.Services
         public Event Add(Event eventModel, int userId)
         {
             eventModel.UserId = userId;
+            eventModel.Created = DateTime.UtcNow;
+            eventModel.Modified = DateTime.UtcNow;
 
             return _eventRepository.Add(eventModel);
         }
@@ -59,8 +61,10 @@ namespace MyCars.Core.Services
         {
             var eventFromRepo = _eventRepository.GetById(eventModel.EventId);
 
-            if (eventFromRepo.UserId == userId)
+            if (eventFromRepo != null && eventFromRepo.UserId == userId)
             {
+                eventModel.Modified = DateTime.UtcNow;
+
                 return _eventRepository.Update(eventModel);
             }
             else

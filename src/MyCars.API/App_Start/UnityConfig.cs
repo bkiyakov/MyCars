@@ -1,7 +1,7 @@
 using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services;
 using MyCars.Core.Services.Interfaces;
-using MyCars.TestRepositories.Repositories;
+using MyCars.Data.Repositories;
 using System;
 
 using Unity;
@@ -48,6 +48,8 @@ namespace MyCars.API
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<ICarService, CarService>();
             container.RegisterType<ICarRepository, CarRepository>();
+            container.RegisterType<IEventService, EventService>();
+            container.RegisterType<IEventRepository, EventRepository>();
         }
     }
 }

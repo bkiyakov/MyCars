@@ -1,5 +1,5 @@
 ﻿using MyCars.Core.Exceptions;
-using MyCars.Core.Models;
+using MyCars.Core.Entities;
 using MyCars.Core.Repositories.Interfaces;
 using MyCars.Core.Services.Interfaces;
 using System;
@@ -20,6 +20,8 @@ namespace MyCars.Core.Services
         public Car Add(Car car, int userId)
         {
             car.UserId = userId;
+            car.Created = DateTime.UtcNow;
+            car.Modified = DateTime.UtcNow;
 
             return _carRepository.Add(car);
         }
@@ -60,8 +62,10 @@ namespace MyCars.Core.Services
         {
             var carFromRepo = _carRepository.GetById(car.CarId);
 
-            if (carFromRepo.UserId == userId)
+            if (carFromRepo != null && carFromRepo.UserId == userId)
             {
+                car.Modified = DateTime.UtcNow;
+
                 return _carRepository.Update(car);
             }
             else
